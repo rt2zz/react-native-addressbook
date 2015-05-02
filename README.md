@@ -47,7 +47,11 @@ function storeContacts(){
 ```
 
 ## Getting started
-TBD - not yet published to npm
+
+1. `npm install react-native-addressbook@latest --save`
+2. In XCode, in the project navigator, right click `Libraries` ➜ `Add Files to [your project's name]`
+3. add `./node_modukes/react-native-addressbook/RCTAddressBook.xcodeproj`
+4. In the XCode project navigator, select your project, select the `Build Phases` tab and in the `Link Binary With Libraries` section add **libRCTAddressBook.a**
 
 ## Methods
 `checkPermission` - checks app's permission to access AddressBook.
