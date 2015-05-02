@@ -1,0 +1,5 @@
+node_modules
+RCTAddressBook.xcodeproj/xcuserdata
+RCTAddressBook.xcodeproj/project.xcworkspace
+
+.npm-debug.log
