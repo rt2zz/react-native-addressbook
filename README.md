@@ -31,8 +31,8 @@ function storeContacts(){
 ## Example Contact Record
 ```js
 {
-  familyName: "Bell",
-  givenName: "Kate",
+  lastName: "Bell",
+  firstName: "Kate",
   middleName: "Middle",
   emailAddresses: [{
     emailAddress: "kate-bell@mac.com",
