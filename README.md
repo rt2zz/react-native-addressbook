@@ -1,4 +1,4 @@
-# react-native-addressbook
+# React Native AddressBook
 
 A react native module for accessing iOS address book (contacts).
 
@@ -61,3 +61,6 @@ TBD - not yet published to npm
 - [ ] `getContacts` options (a la camera roll's getPhotos)
 - [ ] Automatic permission check & request in `getContacts`
 - [ ] Contact Groups support
+
+## Credits
+Big thanks to @mattotodd for [RCTAddressBook](https://github.com/mattotodd/react-native-addressbook-ios) which this is largely based on.
