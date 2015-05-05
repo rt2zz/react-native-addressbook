@@ -3,10 +3,10 @@
 Interact with the iOS AddressBook
 
 ## API
-`checkPermission` (callback) - checks app's permission to access AddressBook.
-`requestPermission` (callback) - requests app permission to access AddressBook.
-`getContacts` (callback) - returns *all* contacts as an array of objects.
-`addContact` (contact, callback) - adds a contact to the AddressBook.
+`checkPermission` (callback) - checks app's permission to access AddressBook.  
+`requestPermission` (callback) - requests app permission to access AddressBook.  
+`getContacts` (callback) - returns *all* contacts as an array of objects  
+`addContact` (contact, callback) - adds a contact to the AddressBook.  
 
 ## Usage Example
 ```js
