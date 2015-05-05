@@ -1,6 +1,12 @@
 # React Native AddressBook
 
-A react native module for accessing iOS address book (contacts).
+Interact with the iOS AddressBook
+
+## API
+`checkPermission` (callback) - checks app's permission to access AddressBook.
+`requestPermission` (callback) - requests app permission to access AddressBook.
+`getContacts` (callback) - returns *all* contacts as an array of objects.
+`addContact` (contact, callback) - adds a contact to the AddressBook.
 
 ## Usage Example
 ```js
@@ -35,15 +41,37 @@ function storeContacts(){
   firstName: "Kate",
   middleName: "Middle",
   emailAddresses: [{
-    emailAddress: "kate-bell@mac.com",
-    emailLabel: "work"
+    label: "work",
+    email: "kate-bell@mac.com",
   }],
   phoneNumbers: [{
-    phoneLabel: "mobile",
-    phoneNumber: "(555) 555-5555"
+    label: "mobile",
+    number: "(555) 555-5555",
   }],
-  thumbnailPath: ""
+  thumbnailPath: "",
 }
+```
+
+## Adding Contacts
+Currently all fields from the contact record except for thumbnailPath are supported for writing
+```js
+var newPerson = {
+  lastName: "Nietzsche",
+  firstName: "Friedrich",
+  emailAddresses: [{
+    label: "work",
+    email: "mrniet@gmail.com",
+  }],
+  phoneNumbers: [{
+    label: "mobile",
+    number: "(555) 555-5555",
+  }],
+}
+
+AddressBook.addContact(newPerson, (err) => {
+  if(!err) console.log('contact added!')
+})
+
 ```
 
 ## Getting started
@@ -53,15 +81,11 @@ function storeContacts(){
 3. add `./node_modukes/react-native-addressbook/RCTAddressBook.xcodeproj`
 4. In the XCode project navigator, select your project, select the `Build Phases` tab and in the `Link Binary With Libraries` section add **libRCTAddressBook.a**
 
-## Methods
-`checkPermission` - checks app's permission to access AddressBook.
-`requestPermission` - requests app permission to access AddressBook.
-`getContacts` - returns *all* contacts as an array of objects.
-
 ## Todo
 - [x] `checkPermission` & `requestPermission`
 - [x] `getContacts` (get all contacts)
-- [ ] Create, Update and Delete methods
+- [x] `addContact`
+- [ ] Update and Delete methods
 - [ ] `getContacts` options (a la camera roll's getPhotos)
 - [ ] Automatic permission check & request in `getContacts`
 - [ ] Contact Groups support

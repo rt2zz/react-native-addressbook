@@ -47,12 +47,10 @@ RCT_EXPORT_METHOD(getContacts:(RCTResponseSenderBlock) callback)
     int currentIndex = 0;
     int maxIndex = --totalContacts;
 
-    NSMutableArray *assets = [[NSMutableArray alloc] init];
     NSMutableArray *contacts = [[NSMutableArray alloc] init];
 
     while (currentIndex <= maxIndex){
         NSDictionary *contact = [self dictionaryRepresentationForABPerson: (ABRecordRef)[allContacts objectAtIndex:(long)currentIndex]];
-        NSDictionary *cont = [allContacts objectAtIndex:(long)currentIndex];
 
         if(contact){
             [contacts addObject:contact];
@@ -107,8 +105,8 @@ RCT_EXPORT_METHOD(getContacts:(RCTResponseSenderBlock) callback)
             CFRelease(phoneLabelRef);
         }
         NSMutableDictionary* phone = [NSMutableDictionary dictionary];
-        [phone setObject: phoneNumber forKey:@"phoneNumber"];
-        [phone setObject: phoneLabel forKey:@"phoneLabel"];
+        [phone setObject: phoneNumber forKey:@"number"];
+        [phone setObject: phoneLabel forKey:@"label"];
         [phoneNumbers addObject:phone];
     }
 
@@ -131,8 +129,8 @@ RCT_EXPORT_METHOD(getContacts:(RCTResponseSenderBlock) callback)
             CFRelease(emailLabelRef);
         }
         NSMutableDictionary* email = [NSMutableDictionary dictionary];
-        [email setObject: emailAddress forKey:@"emailAddress"];
-        [email setObject: emailLabel forKey:@"emailLabel"];
+        [email setObject: emailAddress forKey:@"email"];
+        [email setObject: emailLabel forKey:@"label"];
         [emailAddreses addObject:email];
     }
     //end emails
@@ -171,4 +169,68 @@ RCT_EXPORT_METHOD(getContacts:(RCTResponseSenderBlock) callback)
     }
     return @"";
 }
+
+RCT_EXPORT_METHOD(addContact:(NSDictionary *)contactData callback:(RCTResponseSenderBlock)callback)
+{
+    CFErrorRef error = NULL;
+    ABAddressBookRef addressBookRef = ABAddressBookCreateWithOptions(NULL, nil);
+    ABRecordRef newPerson = ABPersonCreate();
+
+    NSString *firstName = [contactData valueForKey:@"firstName"];
+    NSString *lastName = [contactData valueForKey:@"lastName"];
+    NSString *middleName = [contactData valueForKey:@"middleName"];
+    ABRecordSetValue(newPerson, kABPersonFirstNameProperty, (__bridge CFStringRef) firstName, &error);
+    ABRecordSetValue(newPerson, kABPersonLastNameProperty, (__bridge CFStringRef) lastName, &error);
+    ABRecordSetValue(newPerson, kABPersonMiddleNameProperty, (__bridge CFStringRef) middleName, &error);
+
+    ABMutableMultiValueRef multiPhone = ABMultiValueCreateMutable(kABMultiStringPropertyType);
+    NSArray* phoneNumbers = [contactData valueForKey:@"phoneNumbers"];
+    for (id phoneData in phoneNumbers) {
+      NSString *label = [phoneData valueForKey:@"label"];
+      NSString *number = [phoneData valueForKey:@"number"];
+
+      if ([label isEqual: @"main"]){
+        ABMultiValueAddValueAndLabel(multiPhone, (__bridge CFStringRef) number, kABPersonPhoneMainLabel, NULL);
+      }
+      else if ([label isEqual: @"mobile"]){
+        ABMultiValueAddValueAndLabel(multiPhone, (__bridge CFStringRef) number, kABPersonPhoneMobileLabel, NULL);
+      }
+      else if ([label isEqual: @"iPhone"]){
+        ABMultiValueAddValueAndLabel(multiPhone, (__bridge CFStringRef) number, kABPersonPhoneIPhoneLabel, NULL);
+      }
+      else{
+        ABMultiValueAddValueAndLabel(multiPhone, (__bridge CFStringRef) number, (__bridge CFStringRef) label, NULL);
+      }
+    }
+    ABRecordSetValue(newPerson, kABPersonPhoneProperty, multiPhone, nil);
+    CFRelease(multiPhone);
+
+    ABMutableMultiValueRef multiEmail = ABMultiValueCreateMutable(kABMultiStringPropertyType);
+    NSArray* emails = [contactData valueForKey:@"emailAddresses"];
+    for (id emailData in emails) {
+      NSString *label = [emailData valueForKey:@"label"];
+      NSString *email = [emailData valueForKey:@"email"];
+
+      ABMultiValueAddValueAndLabel(multiEmail, (__bridge CFStringRef) email, (__bridge CFStringRef) label, NULL);
+    }
+    ABRecordSetValue(newPerson, kABPersonEmailProperty, multiEmail, nil);
+    CFRelease(multiEmail);
+
+    ABAddressBookAddRecord(addressBookRef, newPerson, &error);
+    ABAddressBookSave(addressBookRef, &error);
+
+    if (error != NULL)
+    {
+        CFStringRef errorDesc = CFErrorCopyDescription(error);
+        NSString *nsErrorString = (__bridge NSString *)errorDesc;
+        callback(@[nsErrorString]);
+        CFRelease(errorDesc);
+    }
+    else{
+      callback(@[[NSNull null]]);
+    }
+    CFRelease(newPerson);
+    CFRelease(addressBookRef);
+}
+
 @end
