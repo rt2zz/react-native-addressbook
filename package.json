@@ -7,7 +7,7 @@
   "version": "0.1.1",
   "description": "A Addressbook component for React Native.",
   "peerDependencies": {
-    "react-native": "^0.4.0"
+    "react-native": ">=0.4.0 <1.0.0"
   },
   "keywords": [
     "react-native",
