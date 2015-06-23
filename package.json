@@ -5,11 +5,13 @@
     "url": "https://github.com/rt2zz/react-native-addressbook.git"
   },
   "version": "0.1.2",
-  "description": "A Addressbook component for React Native.",
+  "description": "AddressBook module for react-native",
   "keywords": [
     "react-native",
     "react",
-    "native"
+    "react-component",
+    "addressbook",
+    "contacts"
   ],
   "bugs": {
     "url": "https://github.com/rt2zz/react-native-addressbook/issues"

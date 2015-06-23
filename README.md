@@ -1,42 +1,32 @@
 # React Native AddressBook
-
-Interact with the iOS AddressBook
+Access the iOS AddressBook.
 
 ## API
-`checkPermission` (callback) - checks app's permission to access AddressBook.  
-`requestPermission` (callback) - requests app permission to access AddressBook.  
 `getContacts` (callback) - returns *all* contacts as an array of objects  
 `addContact` (contact, callback) - adds a contact to the AddressBook.  
 
+####Permissions Methods (optional)
+`checkPermission` (callback) - checks app's permission to access AddressBook.  
+`requestPermission` (callback) - requests app permission to access AddressBook.  
+
 ## Usage Example
 ```js
-var AddressBook = require('NativeModules').AddressBook;
+var AddressBook = require('react-native-addressbook')
 
-AddressBook.checkPermission((err, permission) => {
-  // AddressBook.PERMISSION_AUTHORIZED || AddressBook.PERMISSION_UNDEFINED || AddressBook.PERMISSION_DENIED
-  if(permission === AddressBook.PERMISSION_UNDEFINED){
-    AddressBook.requestPermission((err, permission) => {
-      storeContacts()
-    })
+AddressBook.getContacts((err, contacts){
+  if(err && err.type === 'permissionDenied'){
+    // x.x
   }
-  if(permission === AddressBook.PERMISSION_AUTHORIZED){
-    storeContacts()
-  })
-  if(permission === AddressBook.PERMISSION_DENIED){
-    //handle permission denied
+  else{
+    console.log(contacts)
   }
 })
-
-function storeContacts(){
-  AddressBook.getContacts((err, contacts){
-    console.log(contacts)
-  })
-}
 ```
 
 ## Example Contact Record
 ```js
 {
+  recordID: 1,
   lastName: "Bell",
   firstName: "Kate",
   middleName: "Middle",
@@ -69,16 +59,33 @@ var newPerson = {
 }
 
 AddressBook.addContact(newPerson, (err) => {
-  if(!err) console.log('contact added!')
+  //...
 })
+```
 
+##Permissions
+Permissions will automatically be checked and if needed requested upon calling getContacts. If you need more granular control you can using the checkPermission and requestPermission methods as follows:
+```js
+AddressBook.checkPermission((err, permission) => {
+  // AddressBook.PERMISSION_AUTHORIZED || AddressBook.PERMISSION_UNDEFINED || AddressBook.PERMISSION_DENIED
+  if(permission === AddressBook.PERMISSION_UNDEFINED){
+    AddressBook.requestPermission((err, permission) => {
+      // yay!
+    })
+  }
+  if(permission === AddressBook.PERMISSION_AUTHORIZED){
+    // yay!
+  })
+  if(permission === AddressBook.PERMISSION_DENIED){
+    // x.x
+  }
+})
 ```
 
 ## Getting started
-
-1. `npm install react-native-addressbook@latest --save`
+1. `npm install react-native-addressbook`
 2. In XCode, in the project navigator, right click `Libraries` ➜ `Add Files to [your project's name]`
-3. add `./node_modukes/react-native-addressbook/RCTAddressBook.xcodeproj`
+3. add `./node_modules/react-native-addressbook/RCTAddressBook.xcodeproj`
 4. In the XCode project navigator, select your project, select the `Build Phases` tab and in the `Link Binary With Libraries` section add **libRCTAddressBook.a**
 
 ## Todo
@@ -87,8 +94,8 @@ AddressBook.addContact(newPerson, (err) => {
 - [x] `addContact`
 - [ ] Update and Delete methods
 - [ ] `getContacts` options (a la camera roll's getPhotos)
-- [ ] Automatic permission check & request in `getContacts`
+- [x] Automatic permission check & request in `getContacts`
 - [ ] Contact Groups support
 
 ## Credits
-Big thanks to @mattotodd for [RCTAddressBook](https://github.com/mattotodd/react-native-addressbook-ios) which this is largely based on.
+Thanks to @mattotodd whose [RCTAddressBook](https://github.com/mattotodd/react-native-addressbook-ios) this is largely derived from.
