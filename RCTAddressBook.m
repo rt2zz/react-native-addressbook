@@ -194,16 +194,29 @@ withCallback:(RCTResponseSenderBlock) callback
 
 RCT_EXPORT_METHOD(addContact:(NSDictionary *)contactData callback:(RCTResponseSenderBlock)callback)
 {
-  CFErrorRef error = NULL;
+  //@TODO keep addressbookRef in singleton
   ABAddressBookRef addressBookRef = ABAddressBookCreateWithOptions(NULL, nil);
   ABRecordRef newPerson = ABPersonCreate();
+  [self updateRecord:newPerson onAddressBook:addressBookRef withData:contactData completionCallback:callback];
+}
 
+RCT_EXPORT_METHOD(updateContact:(NSDictionary *)contactData callback:(RCTResponseSenderBlock)callback)
+{
+  ABAddressBookRef addressBookRef = ABAddressBookCreateWithOptions(NULL, nil);
+  int recordID = (int)[contactData[@"recordID"] integerValue];
+  ABRecordRef record = ABAddressBookGetPersonWithRecordID(addressBookRef, recordID);
+  [self updateRecord:record onAddressBook:addressBookRef withData:contactData completionCallback:callback];
+}
+
+-(void) updateRecord:(ABRecordRef)record onAddressBook:(ABAddressBookRef)addressBookRef withData:(NSDictionary *)contactData completionCallback:(RCTResponseSenderBlock)callback
+{
+  CFErrorRef error = NULL;
   NSString *firstName = [contactData valueForKey:@"firstName"];
   NSString *lastName = [contactData valueForKey:@"lastName"];
   NSString *middleName = [contactData valueForKey:@"middleName"];
-  ABRecordSetValue(newPerson, kABPersonFirstNameProperty, (__bridge CFStringRef) firstName, &error);
-  ABRecordSetValue(newPerson, kABPersonLastNameProperty, (__bridge CFStringRef) lastName, &error);
-  ABRecordSetValue(newPerson, kABPersonMiddleNameProperty, (__bridge CFStringRef) middleName, &error);
+  ABRecordSetValue(record, kABPersonFirstNameProperty, (__bridge CFStringRef) firstName, &error);
+  ABRecordSetValue(record, kABPersonLastNameProperty, (__bridge CFStringRef) lastName, &error);
+  ABRecordSetValue(record, kABPersonMiddleNameProperty, (__bridge CFStringRef) middleName, &error);
 
   ABMutableMultiValueRef multiPhone = ABMultiValueCreateMutable(kABMultiStringPropertyType);
   NSArray* phoneNumbers = [contactData valueForKey:@"phoneNumbers"];
@@ -224,7 +237,7 @@ RCT_EXPORT_METHOD(addContact:(NSDictionary *)contactData callback:(RCTResponseSe
       ABMultiValueAddValueAndLabel(multiPhone, (__bridge CFStringRef) number, (__bridge CFStringRef) label, NULL);
     }
   }
-  ABRecordSetValue(newPerson, kABPersonPhoneProperty, multiPhone, nil);
+  ABRecordSetValue(record, kABPersonPhoneProperty, multiPhone, nil);
   CFRelease(multiPhone);
 
   ABMutableMultiValueRef multiEmail = ABMultiValueCreateMutable(kABMultiStringPropertyType);
@@ -235,12 +248,10 @@ RCT_EXPORT_METHOD(addContact:(NSDictionary *)contactData callback:(RCTResponseSe
 
     ABMultiValueAddValueAndLabel(multiEmail, (__bridge CFStringRef) email, (__bridge CFStringRef) label, NULL);
   }
-  ABRecordSetValue(newPerson, kABPersonEmailProperty, multiEmail, nil);
+  ABRecordSetValue(record, kABPersonEmailProperty, multiEmail, nil);
   CFRelease(multiEmail);
 
-  ABAddressBookAddRecord(addressBookRef, newPerson, &error);
   ABAddressBookSave(addressBookRef, &error);
-
   if (error != NULL)
   {
     CFStringRef errorDesc = CFErrorCopyDescription(error);
@@ -251,8 +262,18 @@ RCT_EXPORT_METHOD(addContact:(NSDictionary *)contactData callback:(RCTResponseSe
   else{
     callback(@[[NSNull null]]);
   }
-  CFRelease(newPerson);
-  CFRelease(addressBookRef);
+}
+
+RCT_EXPORT_METHOD(deleteContact:(NSDictionary *)contactData callback:(RCTResponseSenderBlock)callback)
+{
+  CFErrorRef error = NULL;
+  ABAddressBookRef addressBookRef = ABAddressBookCreateWithOptions(NULL, nil);
+  int recordID = (int)[contactData[@"recordID"] integerValue];
+  ABRecordRef record = ABAddressBookGetPersonWithRecordID(addressBookRef, recordID);
+  ABAddressBookRemoveRecord(addressBookRef, record, &error);
+  ABAddressBookSave(addressBookRef, &error);
+  //@TODO handle error
+  callback(@[[NSNull null], [NSNull null]]);
 }
 
 @end
