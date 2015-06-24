@@ -94,7 +94,7 @@ AddressBook.checkPermission((err, permission) => {
 - [x] `checkPermission` & `requestPermission`
 - [x] `getContacts` (get all contacts)
 - [x] `addContact`
-- [ ] Update and Delete methods
+- [x] Update and Delete methods
 - [ ] `getContacts` options (a la camera roll's getPhotos)
 - [x] Automatic permission check & request in `getContacts`
 - [ ] Contact Groups support
