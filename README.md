@@ -1,5 +1,5 @@
 # React Native AddressBook
-Access the iOS AddressBook.
+Access the iOS AddressBook.  
 
 ## API
 `getContacts` (callback) - returns *all* contacts as an array of objects  
@@ -8,8 +8,8 @@ Access the iOS AddressBook.
 `deleteContact` (contact, callback) - where contact has a valid recordID
 
 ####Permissions Methods (optional)
-`checkPermission` (callback) - checks app's permission to access AddressBook.  
-`requestPermission` (callback) - requests app permission to access AddressBook.  
+`checkPermission` (callback) - checks permission to use AddressBook.  
+`requestPermission` (callback) - request permission to use AddressBook.  
 
 ## Usage Example
 ```js
@@ -29,12 +29,12 @@ AddressBook.getContacts((err, contacts){
 ```js
 {
   recordID: 1,
-  lastName: "Bell",
-  firstName: "Kate",
-  middleName: "Middle",
+  lastName: "Jung",
+  firstName: "Carl",
+  middleName: "",
   emailAddresses: [{
     label: "work",
-    email: "kate-bell@mac.com",
+    email: "carl-jung@test.com",
   }],
   phoneNumbers: [{
     label: "mobile",
@@ -52,18 +52,32 @@ var newPerson = {
   firstName: "Friedrich",
   emailAddresses: [{
     label: "work",
-    email: "mrniet@gmail.com",
-  }],
-  phoneNumbers: [{
-    label: "mobile",
-    number: "(555) 555-5555",
+    email: "mrniet@test.com",
   }],
 }
 
-AddressBook.addContact(newPerson, (err) => {
-  //...
+AddressBook.addContact(newPerson, (err) => { /*...*/ })
+```
+
+## Updating and Deleting Contacts
+```js
+//contrived example
+AddressBook.getContacts((err, contacts){
+  //update the first record
+  let someRecord = contacts[0]
+  someRecord.emailAddresses.push({
+    label: "junk",
+    email: "mrniet+junkmail@test.com",
+  })
+  AddressBook.updateContact(someRecord, (err) => { /*...*/ })
+  
+  //delete the second record
+  AddressBook.deleteContact(contacts[1], (err) => { /*...*/ })
 })
 ```
+Update and delete reference contacts by their recordID (as returned by the OS in getContacts). Apple does not gaurantee the recordID will not change, e.g. it may be reassigned during a phone migration. Consequently you should always grab a fresh contact list with `getContacts` before performing update and delete operations.
+
+You can also delete a record using only it's recordID like follows: `AddressBook.deleteContact({recordID: 1}, (err) => {})}`
 
 ##Permissions
 Permissions will automatically be checked and if needed requested upon calling getContacts. If you need more granular control you can using the checkPermission and requestPermission methods as follows:
@@ -72,7 +86,7 @@ AddressBook.checkPermission((err, permission) => {
   // AddressBook.PERMISSION_AUTHORIZED || AddressBook.PERMISSION_UNDEFINED || AddressBook.PERMISSION_DENIED
   if(permission === AddressBook.PERMISSION_UNDEFINED){
     AddressBook.requestPermission((err, permission) => {
-      // yay!
+      // ...
     })
   }
   if(permission === AddressBook.PERMISSION_AUTHORIZED){
