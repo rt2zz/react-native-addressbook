@@ -34,7 +34,7 @@ AddressBook.getContacts((err, contacts){
   middleName: "",
   emailAddresses: [{
     label: "work",
-    email: "carl-jung@test.com",
+    email: "carl-jung@example.com",
   }],
   phoneNumbers: [{
     label: "mobile",
@@ -52,7 +52,7 @@ var newPerson = {
   firstName: "Friedrich",
   emailAddresses: [{
     label: "work",
-    email: "mrniet@test.com",
+    email: "mrniet@example.com",
   }],
 }
 
