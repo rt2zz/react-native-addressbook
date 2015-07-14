@@ -1,4 +1,4 @@
-var RCTAddressBook = require('NativeModules').AddressBook
+var RCTAddressBook = require('react-native').NativeModules.AddressBook
 var invariant = require('invariant')
 var logError = require('logError')
 var warning = require('warning')
