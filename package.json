@@ -13,6 +13,9 @@
     "addressbook",
     "contacts"
   ],
+  "dependencies": {
+    "react-native": "^0.7.1"
+  },
   "bugs": {
     "url": "https://github.com/rt2zz/react-native-addressbook/issues"
   },
