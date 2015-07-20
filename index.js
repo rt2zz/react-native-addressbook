@@ -1,4 +1,1 @@
-var React = require('react-native');
-var AddressBook = React.NativeModules.AddressBook;
-
-module.exports = AddressBook;
+module.exports = require('react-native').NativeModules.AddressBook;
