@@ -84,15 +84,15 @@ Permissions will automatically be checked and if needed requested upon calling g
 ```js
 AddressBook.checkPermission( function(err, permission) {
   // AddressBook.PERMISSION_AUTHORIZED || AddressBook.PERMISSION_UNDEFINED || AddressBook.PERMISSION_DENIED
-  if(permission === AddressBook.PERMISSION_UNDEFINED){
+  if(permission === 'undefined'){
     AddressBook.requestPermission( function(err, permission) {
       // ...
     });
   }
-  if(permission === AddressBook.PERMISSION_AUTHORIZED){
+  if(permission === 'authorized'){
     // yay!
   }
-  if(permission === AddressBook.PERMISSION_DENIED){
+  if(permission === 'denied'){
     // x.x
   }
 });
