@@ -1,25 +1,22 @@
-var RCTAddressBook = require('react-native').NativeModules.AddressBook
-var invariant = require('invariant')
-var logError = require('logError')
-var warning = require('warning')
+var RCTAddressBook = require('react-native').NativeModules.AddressBook;
 
 var AddressBook = {
 
-  getContacts(callback) {
-    RCTAddressBook.getContacts(callback)
+  getContacts: function(callback) {
+    RCTAddressBook.getContacts(callback);
   },
 
-  addContact(record, callback) {
-    RCTAddressBook.addContact(record, callback)
+  addContact: function(record, callback) {
+    RCTAddressBook.addContact(record, callback);
   },
 
-  checkPermission(callback) {
-    RCTAddressBook.checkPermission(callback)
+  checkPermission: function(callback) {
+    RCTAddressBook.checkPermission(callback);
   },
 
-  requestPermission(callback) {
-    RCTAddressBook.requestPermission(callback)
+  requestPermission: function(callback) {
+    RCTAddressBook.requestPermission(callback);
   }
-}
+};
 
-module.exports = AddressBook
+module.exports = AddressBook;
