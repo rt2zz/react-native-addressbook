@@ -15,7 +15,7 @@ Access the iOS AddressBook.
 ```js
 var AddressBook = require('react-native-addressbook')
 
-AddressBook.getContacts( function(err, contacts) {
+AddressBook.getContacts( (err, contacts) => {
   if(err && err.type === 'permissionDenied'){
     // x.x
   }
@@ -56,38 +56,38 @@ var newPerson = {
   }],
 }
 
-AddressBook.addContact(newPerson, function(err) { /*...*/ });
+AddressBook.addContact(newPerson, (err) => { /*...*/ })
 ```
 
 ## Updating and Deleting Contacts
 ```js
 //contrived example
-AddressBook.getContacts( function(err, contacts){
+AddressBook.getContacts( (err, contacts) => {
   //update the first record
-  let someRecord = contacts[0];
+  let someRecord = contacts[0]
   someRecord.emailAddresses.push({
     label: "junk",
     email: "mrniet+junkmail@test.com",
-  });
-  AddressBook.updateContact(someRecord, function(err){ /*...*/ });
+  })
+  AddressBook.updateContact(someRecord, (err) => { /*...*/ })
 
   //delete the second record
-  AddressBook.deleteContact(contacts[1], function(err) { /*...*/ });
-});
+  AddressBook.deleteContact(contacts[1], (err) => { /*...*/ })
+})
 ```
-Update and delete reference contacts by their recordID (as returned by the OS in getContacts). Apple does not gaurantee the recordID will not change, e.g. it may be reassigned during a phone migration. Consequently you should always grab a fresh contact list with `getContacts` before performing update and delete operations.
+Update and delete reference contacts by their recordID (as returned by the OS in getContacts). Apple does not guarantee the recordID will not change, e.g. it may be reassigned during a phone migration. Consequently you should always grab a fresh contact list with `getContacts` before performing update and delete operations.
 
 You can also delete a record using only it's recordID like follows: `AddressBook.deleteContact({recordID: 1}, (err) => {})}`
 
 ##Permissions
 Permissions will automatically be checked and if needed requested upon calling getContacts. If you need more granular control you can using the checkPermission and requestPermission methods as follows:
 ```js
-AddressBook.checkPermission( function(err, permission) {
+AddressBook.checkPermission( (err, permission) => {
   // AddressBook.PERMISSION_AUTHORIZED || AddressBook.PERMISSION_UNDEFINED || AddressBook.PERMISSION_DENIED
   if(permission === 'undefined'){
-    AddressBook.requestPermission( function(err, permission) {
+    AddressBook.requestPermission( (err, permission) => {
       // ...
-    });
+    })
   }
   if(permission === 'authorized'){
     // yay!
@@ -95,7 +95,7 @@ AddressBook.checkPermission( function(err, permission) {
   if(permission === 'denied'){
     // x.x
   }
-});
+})
 ```
 
 ## Getting started
