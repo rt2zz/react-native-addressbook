@@ -197,6 +197,11 @@ RCT_EXPORT_METHOD(addContact:(NSDictionary *)contactData callback:(RCTResponseSe
   //@TODO keep addressbookRef in singleton
   ABAddressBookRef addressBookRef = ABAddressBookCreateWithOptions(NULL, nil);
   ABRecordRef newPerson = ABPersonCreate();
+
+  CFErrorRef error = NULL;
+  ABAddressBookAddRecord(addressBookRef, newPerson, &error);
+  //@TODO error handling
+
   [self updateRecord:newPerson onAddressBook:addressBookRef withData:contactData completionCallback:callback];
 }
 
