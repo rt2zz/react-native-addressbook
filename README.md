@@ -1,6 +1,8 @@
 # React Native AddressBook
 Access the iOS AddressBook.  
 
+**NOTE** this module is not yet compatible with android. PR welcome!
+
 ## API
 `getContacts` (callback) - returns *all* contacts as an array of objects  
 `addContact` (contact, callback) - adds a contact to the AddressBook.  
