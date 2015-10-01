@@ -6,8 +6,8 @@ Access the iOS AddressBook.
 ## API
 `getContacts` (callback) - returns *all* contacts as an array of objects  
 `addContact` (contact, callback) - adds a contact to the AddressBook.  
-`updateContact` (contact, callback) - where contact has a valid recordID  
-`deleteContact` (contact, callback) - where contact has a valid recordID  
+`updateContact` (contact, callback) - where contact is an object with a valid recordID  
+`deleteContact` (contact, callback) - where contact is an object with a valid recordID  
 
 ####Permissions Methods (optional)
 `checkPermission` (callback) - checks permission to use AddressBook.  
