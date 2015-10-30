@@ -1,7 +1,5 @@
 # React Native AddressBook
-Access the iOS AddressBook.  
-
-**NOTE** this module is not yet compatible with android. PR welcome!
+**NOTE** Future development will occur at [react-native-contacts](https://github.com/rt2zz/react-native-contacts). Migration is trivial (rename `getContacts` -> `getAll`)
 
 ## API
 `getContacts` (callback) - returns *all* contacts as an array of objects  
