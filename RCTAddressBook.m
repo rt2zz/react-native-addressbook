@@ -167,9 +167,22 @@ withCallback:(RCTResponseSenderBlock) callback
 -(NSString *) getABPersonThumbnailFilepath:(ABRecordRef) person
 {
   if (ABPersonHasImageData(person)){
+
+    NSArray *linkedPersons = CFBridgingRelease(ABPersonCopyArrayOfAllLinkedPeople(person));
+    for (id obj in linkedPersons) {
+        ABRecordRef aLinkedPerson = (__bridge ABRecordRef)obj;
+        if (aLinkedPerson == person) {
+            continue; // skip the original one
+        }
+        if (ABPersonHasImageData(aLinkedRecord)) {
+            person = aLinkedRecord;
+            break;
+        }
+    }
+
     CFDataRef photoDataRef = ABPersonCopyImageDataWithFormat(person, kABPersonImageFormatThumbnail);
     if(!photoDataRef){
-      return nil;
+      return @"";
     }
 
     NSData* data = (__bridge_transfer NSData*)photoDataRef;
