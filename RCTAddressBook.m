@@ -174,8 +174,8 @@ withCallback:(RCTResponseSenderBlock) callback
         if (aLinkedPerson == person) {
             continue; // skip the original one
         }
-        if (ABPersonHasImageData(aLinkedRecord)) {
-            person = aLinkedRecord;
+        if (ABPersonHasImageData(aLinkedPerson)) {
+            person = aLinkedPerson;
             break;
         }
     }
