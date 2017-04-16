@@ -7,7 +7,7 @@
 `updateContact` (contact, callback) - where contact is an object with a valid recordID  
 `deleteContact` (contact, callback) - where contact is an object with a valid recordID  
 
-####Permissions Methods (optional)
+#### Permissions Methods (optional)
 `checkPermission` (callback) - checks permission to use AddressBook.  
 `requestPermission` (callback) - request permission to use AddressBook.  
 
@@ -79,7 +79,7 @@ Update and delete reference contacts by their recordID (as returned by the OS in
 
 You can also delete a record using only it's recordID like follows: `AddressBook.deleteContact({recordID: 1}, (err) => {})}`
 
-##Permissions
+## Permissions
 Permissions will automatically be checked and if needed requested upon calling getContacts. If you need more granular control you can using the checkPermission and requestPermission methods as follows:
 ```js
 AddressBook.checkPermission( (err, permission) => {
